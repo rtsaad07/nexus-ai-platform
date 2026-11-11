@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Revolution 2026 | Gemini, Claude, DeepSeek, AGI & UGI</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#080a11',
+                            card: 'rgba(16, 22, 36, 0.7)',
+                            border: 'rgba(56, 189, 248, 0.2)',
+                            accent: '#38bdf8',
+                            purple: '#a855f7',
+                            emerald: '#10b981',
+                            rose: '#f43f5e',
+                            amber: '#f59e0b'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite alternate',
+                        'float': 'float 6s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(56, 189, 248, 0.2)' },
+                            '100%': { boxShadow: '0 0 35px rgba(168, 85, 247, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+        code, pre, .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Hardware Accelerated Smooth Canvas & Glassmorphism */
+        canvas#bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, box-shadow;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 20px 40px -15px rgba(14, 165, 233, 0.25);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #f43f5e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-alt {
+            background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #080a11;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+
+        /* Light mode adjustments */
+        html[data-theme="light"] {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        html[data-theme="light"] .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+        }
+        html[data-theme="light"] .glass-card:hover {
+            box-shadow: 0 20px 35px -10px rgba(14, 165, 233, 0.15);
+        }
+
+        /* Section Reveal Observer */
+        .reveal-section {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+        .reveal-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#080a11] text-slate-100 min-h-screen selection:bg-sky-500 selection:text-white relative overflow-x-hidden">
+
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-4 lg:px-8 py-3.5 transition-all">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-purple-500 to-rose-500 p-0.5 shadow-lg group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-brain text-sky-400 group-hover:rotate-12 transition-transform"></i>
+                    </div>
+                </div>
+                <span class="font-extrabold text-xl tracking-tight gradient-text">NEXUS AI 2026</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-1 lg:gap-2 text-sm font-medium text-slate-300">
+                <a href="#frontier" class="px-3 py-1.5 rounded-lg hover:text-sky-400 hover:bg-slate-800/50 transition">Frontier Trio</a>
+                <a href="#how-it-works" class="px-3 py-1.5 rounded-lg hover:text-sky-400 hover:bg-slate-800/50 transition">Architecture</a>
+                <a href="#models" class="px-3 py-1.5 rounded-lg hover:text-sky-400 hover:bg-slate-800/50 transition">Models Matrix</a>
+                <a href="#agi" class="px-3 py-1.5 rounded-lg hover:text-sky-400 hover:bg-slate-800/50 transition">AGI</a>
+                <a href="#ugi" class="px-3 py-1.5 rounded-lg hover:text-sky-400 hover:bg-slate-800/50 transition">UGI Ecosystem</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl glass-card text-slate-300 hover:text-amber-400 transition hover:scale-105 active:scale-95" title="Toggle Light/Dark Theme">
+                    <i class="fa-solid fa-moon text-lg" id="theme-icon"></i>
+                </button>
+                <a href="#ugi" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-purple-600 hover:from-sky-400 hover:to-purple-500 text-white font-semibold text-sm shadow-lg shadow-sky-500/20 transition hover:scale-105 active:scale-95">
+                    <span>Explore Tools</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-16 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center reveal-section">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-sky-400 text-xs sm:text-sm font-semibold mb-6 border border-sky-500/30 animate-pulse-glow">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            The State of Artificial Intelligence & Beyond
+        </div>
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-tight">
+            Next-Gen AI Frontier: <br class="hidden sm:inline"/>
+            <span class="gradient-text">Gemini, Claude & DeepSeek</span>
+        </h1>
+        <p class="max-w-3xl mx-auto text-base sm:text-xl text-slate-300 font-normal leading-relaxed mb-10">
+            Unraveling breakthrough reasoning architectures, Mixture-of-Experts (MoE), context windows scaling to millions, Artificial General Intelligence (AGI) trajectories, and User-Generated Intelligence (UGI).
+        </p>
+
+        <!-- Quick Stats Banner -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div class="glass-card p-4 rounded-2xl">
+                <div class="text-2xl sm:text-3xl font-extrabold text-sky-400">2M+</div>
+                <div class="text-xs text-slate-400 font-medium mt-1">Context Token Limit</div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl">
+                <div class="text-2xl sm:text-3xl font-extrabold text-purple-400">MoE + MLA</div>
+                <div class="text-xs text-slate-400 font-medium mt-1">Efficient Architectures</div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl">
+                <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">CoT Reasoning</div>
+                <div class="text-xs text-slate-400 font-medium mt-1">DeepSeek-R1 Engine</div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl">
+                <div class="text-2xl sm:text-3xl font-extrabold text-rose-400">UGI Workflows</div>
+                <div class="text-xs text-slate-400 font-medium mt-1">Multi-modal Creation</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-28 pb-24">
+
+        <!-- SECTION 1: Frontier Models (Gemini, Claude, DeepSeek) -->
+        <section id="frontier" class="reveal-section space-y-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+                    <i class="fa-solid fa-crown text-amber-400 mr-2"></i> The Big Three AI Frontier Titans
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    Discover how Google, Anthropic, and DeepSeek are pushing the absolute boundaries of intelligence, speed, cost, and open-weight accessibility.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Gemini Card -->
+                <div class="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden group border-t-4 border-t-sky-500">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-400 text-2xl font-bold border border-sky-500/20">
+                                <i class="fa-solid fa-sparkles"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">Gemini</h3>
+                                <p class="text-xs text-sky-400 font-mono">By Google DeepMind</p>
+                            </div>
+                        </div>
+                        <a href="https://gemini.google.com/" target="_blank" class="text-slate-400 hover:text-sky-400 transition" title="Visit Gemini">
+                            <i class="fa-solid fa-up-right-from-square text-lg"></i>
+                        </a>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                        Built natively multimodal from the ground up. Gemini leads the industry in context capacity (up to 2 Million tokens), allowing entire codebases, long movies, and massive audio archives to be ingested and reasoned across instantaneously.
+                    </p>
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6 font-mono">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Native Multimodality (Audio, Video, Text, Code)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Industry-best 1M-2M Token Context Window</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> High-Efficiency Flash Architecture</li>
+                    </ul>
+                    <button onclick="openModal('gemini-detail')" class="w-full py-2.5 rounded-xl bg-slate-800/80 hover:bg-sky-500/20 text-sky-300 font-semibold text-xs border border-sky-500/30 transition">
+                        Deep Dive Gemini Architecture
+                    </button>
+                </div>
+
+                <!-- Claude Card -->
+                <div class="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden group border-t-4 border-t-purple-500">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-2xl font-bold border border-purple-500/20">
+                                <i class="fa-solid fa-feather-pointed"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">Claude</h3>
+                                <p class="text-xs text-purple-400 font-mono">By Anthropic</p>
+                            </div>
+                        </div>
+                        <a href="https://claude.ai/" target="_blank" class="text-slate-400 hover:text-purple-400 transition" title="Visit Claude">
+                            <i class="fa-solid fa-up-right-from-square text-lg"></i>
+                        </a>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                        Renowned for unmatched coding mastery, complex nuance comprehension, and Constitutional AI alignment. Claude 3.5 Sonnet is widely considered the ultimate developer benchmark for autonomous software engineering.
+                    </p>
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6 font-mono">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> SOTA Software Development & Refactoring</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Artifacts Dynamic Live Workspace</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Computer Use (Autonomous UI Navigation)</li>
+                    </ul>
+                    <button onclick="openModal('claude-detail')" class="w-full py-2.5 rounded-xl bg-slate-800/80 hover:bg-purple-500/20 text-purple-300 font-semibold text-xs border border-purple-500/30 transition">
+                        Deep Dive Claude Architecture
+                    </button>
+                </div>
+
+                <!-- DeepSeek Card -->
+                <div class="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden group border-t-4 border-t-rose-500">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-rose-500/10 flex items-center justify-center text-rose-400 text-2xl font-bold border border-rose-500/20">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-white">DeepSeek</h3>
+                                <p class="text-xs text-rose-400 font-mono">By DeepSeek AI</p>
+                            </div>
+                        </div>
+                        <a href="https://www.deepseek.com/" target="_blank" class="text-slate-400 hover:text-rose-400 transition" title="Visit DeepSeek">
+                            <i class="fa-solid fa-up-right-from-square text-lg"></i>
+                        </a>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                        The open-weights disruptor that shook the AI industry. DeepSeek-R1 introduced open Chain-of-Thought (CoT) reasoning models trained at a fraction of standard compute costs using Multi-Head Latent Attention (MLA) and DeepSeekMoE.
+                    </p>
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6 font-mono">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Open Weights & Distilled Reasoning Models</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> DeepSeekMoE & MLA Efficiency</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Pure Reinforcement Learning (RL) Reasoning</li>
+                    </ul>
+                    <button onclick="openModal('deepseek-detail')" class="w-full py-2.5 rounded-xl bg-slate-800/80 hover:bg-rose-500/20 text-rose-300 font-semibold text-xs border border-rose-500/30 transition">
+                        Deep Dive DeepSeek Architecture
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: How They Work (Technical Architecture Breakdown) -->
+        <section id="how-it-works" class="reveal-section space-y-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+                    <i class="fa-solid fa-gears text-sky-400 mr-2"></i> How Modern Large AI Models Work
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    From raw Transformer attention matrices to Mixture-of-Experts and Chain-of-Thought Reinforcement Learning.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Pillar 1 -->
+                <div class="glass-card p-6 rounded-2xl space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-sky-500/20 flex items-center justify-center text-sky-400 font-bold">1</div>
+                    <h3 class="text-lg font-bold text-white">Transformers & Attention</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        LLMs process text by converting tokens into high-dimensional vector embeddings. Multi-Head Attention mechanisms allow models to dynamically weigh relationships between words regardless of distance.
+                    </p>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="glass-card p-6 rounded-2xl space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold">2</div>
+                    <h3 class="text-lg font-bold text-white">Mixture of Experts (MoE)</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Instead of activating all parameters for every token, MoE routes tokens to specialized sub-networks ("experts"). This achieves trillion-parameter performance at a fraction of active compute cost.
+                    </p>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="glass-card p-6 rounded-2xl space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">3</div>
+                    <h3 class="text-lg font-bold text-white">Reinforcement Learning (RLHF/RLAIF)</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Base models are aligned using Reinforcement Learning with Human Feedback (RLHF) or AI Feedback (RLAIF) to ensure safety, helpfulness, and conversational alignment.
+                    </p>
+                </div>
+
+                <!-- Pillar 4 -->
+                <div class="glass-card p-6 rounded-2xl space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400 font-bold">4</div>
+                    <h3 class="text-lg font-bold text-white">CoT Reasoning Engine</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Reasoning models (like DeepSeek-R1 and OpenAI o3) utilize test-time compute—generating explicit step-by-step thinking tokens before finalizing output to solve complex math, code, and logic.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Comprehensive Model Matrix & Comparison -->
+        <section id="models" class="reveal-section space-y-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+                    <i class="fa-solid fa-table-cells text-purple-400 mr-2"></i> Comprehensive Model Breakdown Matrix
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    Filter and inspect distinct model variants, parameter scopes, context limits, and target workloads.
+                </p>
+
+                <!-- Filter Tabs -->
+                <div class="flex flex-wrap justify-center gap-2 mt-6">
+                    <button onclick="filterModels('all')" class="model-tab active px-4 py-2 rounded-xl text-xs font-semibold bg-sky-500 text-white transition">All Models</button>
+                    <button onclick="filterModels('gemini')" class="model-tab px-4 py-2 rounded-xl text-xs font-semibold glass-card text-slate-300 hover:text-sky-400 transition">Google Gemini</button>
+                    <button onclick="filterModels('claude')" class="model-tab px-4 py-2 rounded-xl text-xs font-semibold glass-card text-slate-300 hover:text-purple-400 transition">Anthropic Claude</button>
+                    <button onclick="filterModels('deepseek')" class="model-tab px-4 py-2 rounded-xl text-xs font-semibold glass-card text-slate-300 hover:text-rose-400 transition">DeepSeek AI</button>
+                </div>
+            </div>
+
+            <!-- Comparison Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="model-grid">
+                
+                <!-- Gemini 1.5 Pro -->
+                <div class="model-card glass-card p-6 rounded-2xl space-y-4" data-provider="gemini">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-400 border border-sky-500/30">Google</span>
+                        <span class="text-xs text-slate-400 font-mono">2M Tokens</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Gemini 1.5 Pro</h3>
+                    <p class="text-slate-300 text-xs">Flagship multimodal model engineered for massive context analysis, audio/video ingestion, and complex problem solving across millions of tokens.</p>
+                    <div class="pt-2 border-t border-slate-800 text-xs font-mono text-slate-400 space-y-1">
+                        <div><strong>Strength:</strong> Longest Context Window</div>
+                        <div><strong>Multimodal:</strong> Native Video, Audio, Image</div>
+                    </div>
+                </div>
+
+                <!-- Gemini 1.5 Flash -->
+                <div class="model-card glass-card p-6 rounded-2xl space-y-4" data-provider="gemini">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-400 border border-sky-500/30">Google</span>
+                        <span class="text-xs text-slate-400 font-mono">1M Tokens</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Gemini 1.5 Flash</h3>
+                    <p class="text-slate-300 text-xs">Ultra-fast, cost-optimized model designed for high-frequency low-latency API tasks, summaries, and agentic pipelines.</p>
+                    <div class="pt-2 border-t border-slate-800 text-xs font-mono text-slate-400 space-y-1">
+                        <div><strong>Strength:</strong> Speed & Cost Ratio</div>
+                        <div><strong>Multimodal:</strong> Text, Image, Audio</div>
+                    </div>
+                </div>
+
+                <!-- Claude 3.5 Sonnet -->
+                <div class="model-card glass-card p-6 rounded-2xl space-y-4" data-provider="claude">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-400 border border-purple-500/30">Anthropic</span>
+                        <span class="text-xs text-slate-400 font-mono">200K Tokens</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Claude 3.5 Sonnet</h3>
+                    <p class="text-slate-300 text-xs">The current industry gold standard for software engineering, complex reasoning, nuance, and visual artifact generation.</p>
+                    <div class="pt-2 border-t border-slate-800 text-xs font-mono text-slate-400 space-y-1">
+                        <div><strong>Strength:</strong> Elite Coding & Workflows</div>
+                        <div><strong>Speciality:</strong> Dynamic Artifact Execution</div>
+                    </div>
+                </div>
+
+                <!-- Claude 3.5 Haiku -->
+                <div class="model-card glass-card p-6 rounded-2xl space-y-4" data-provider="claude">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-400 border border-purple-500/30">Anthropic</span>
+                        <span class="text-xs text-slate-400 font-mono">200K Tokens</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Claude 3.5 Haiku</h3>
+                    <p class="text-slate-300 text-xs">Lightning-fast intelligence matching previous generation flagship speeds while maintaining high coding and text output accuracy.</p>
+                    <div class="pt-2 border-t border-slate-800 text-xs font-mono text-slate-400 space-y-1">
+                        <div><strong>Strength:</strong> High Speed Agent Execution</div>
+                        <div><strong>Speciality:</strong> Structured Output Generation</div>
+                    </div>
+                </div>
+
+                <!-- DeepSeek-V3 -->
+                <div class="model-card glass-card p-6 rounded-2xl space-y-4" data-provider="deepseek">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-rose-500/20 text-rose-400 border border-rose-500/30">DeepSeek</span>
+                        <span class="text-xs text-slate-400 font-mono">671B (37B Active)</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">DeepSeek-V3</h3>
+                    <p class="text-slate-300 text-xs">Massive MoE open-weight architecture leveraging Multi-Head Latent Attention (MLA) for remarkable inference speed and low memory footprint.</p>
+                    <div class="pt-2 border-t border-slate-800 text-xs font-mono text-slate-400 space-y-1">
+                        <div><strong>Strength:</strong> Open Weights & Efficiency</div>
+                        <div><strong>Architecture:</strong> DeepSeekMoE + MLA</div>
+                    </div>
+                </div>
+
+                <!-- DeepSeek-R1 -->
+                <div class="model-card glass-card p-6 rounded-2xl space-y-4" data-provider="deepseek">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-rose-500/20 text-rose-400 border border-rose-500/30">DeepSeek</span>
+                        <span class="text-xs text-slate-400 font-mono">Open Reasoning</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">DeepSeek-R1</h3>
+                    <p class="text-slate-300 text-xs">Open-source Chain-of-Thought reasoning model matching OpenAI's o1 performance in mathematics, competitive programming, and formal logic.</p>
+                    <div class="pt-2 border-t border-slate-800 text-xs font-mono text-slate-400 space-y-1">
+                        <div><strong>Strength:</strong> Mathematical & Logic Reasoning</div>
+                        <div><strong>Distillation:</strong> Open Qwen & Llama distilled models</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 4: Artificial General Intelligence (AGI) -->
+        <section id="agi" class="reveal-section space-y-10">
+            <div class="glass-card p-8 sm:p-12 rounded-3xl relative overflow-hidden border border-purple-500/30">
+                <div class="max-w-3xl space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-500/20 text-purple-300 text-xs font-mono">
+                        <i class="fa-solid fa-brain-circuit"></i> Horizon 2026-2030
+                    </div>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+                        Artificial General Intelligence (AGI)
+                    </h2>
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+                        AGI represents autonomous systems that demonstrate cognitive abilities across all human economically valuable tasks—learning, reasoning, adapting, and innovating without domain-specific re-training.
+                    </p>
+
+                    <!-- AGI Levels Breakdown -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                            <span class="text-xs text-sky-400 font-mono font-bold">Level 1: Emerging</span>
+                            <div class="text-sm font-semibold text-white">Equal to unskilled human</div>
+                            <p class="text-xs text-slate-400">Current LLMs (ChatGPT, Gemini, Claude) with high knowledge coverage.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                            <span class="text-xs text-purple-400 font-mono font-bold">Level 2: Competent</span>
+                            <div class="text-sm font-semibold text-white">50th percentile skilled adult</div>
+                            <p class="text-xs text-slate-400">Reasoning models capable of multi-step code and mathematical discovery.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                            <span class="text-xs text-emerald-400 font-mono font-bold">Level 3: Expert</span>
+                            <div class="text-sm font-semibold text-white">90th percentile skilled adult</div>
+                            <p class="text-xs text-slate-400">Autonomous scientific research agents and long-horizon physical robotics.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-1">
+                            <span class="text-xs text-rose-400 font-mono font-bold">Level 4 & 5: Virtuoso / ASI</span>
+                            <div class="text-sm font-semibold text-white">Superhuman Execution</div>
+                            <p class="text-xs text-slate-400">Artificial Superintelligence surpassing all combined human intellect.</p>
+                        </div>
+                    </div>
+
+                    <!-- Key Bottlenecks -->
+                    <div class="pt-4 space-y-3">
+                        <h4 class="text-sm font-bold text-slate-200 uppercase tracking-wider">Remaining Bottlenecks To True AGI:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-lg bg-slate-800 text-xs text-slate-300"><i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i> Energy Grid Limits</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-800 text-xs text-slate-300"><i class="fa-solid fa-database text-sky-400 mr-1.5"></i> High-Quality Data Exhaustion</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-800 text-xs text-slate-300"><i class="fa-solid fa-earth-americas text-emerald-400 mr-1.5"></i> Physical World Grounding</span>
+                            <span class="px-3 py-1 rounded-lg bg-slate-800 text-xs text-slate-300"><i class="fa-solid fa-shield-halved text-rose-400 mr-1.5"></i> Alignment & Control</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: UGI (User-Generated Intelligence) & Media Workflows -->
+        <section id="ugi" class="reveal-section space-y-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+                    <i class="fa-solid fa-wand-magic-sparkles text-emerald-400 mr-2"></i> UGI: User-Generated Intelligence
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base">
+                    User-Generated Intelligence represents the shift where creators combine multi-modal generative pipelines (video, voice, avatars, code) to produce full-scale media and software autonomously.
+                </p>
+            </div>
+
+            <!-- Flagship Tools Showcase Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- HeyGen -->
+                <div class="glass-card p-6 rounded-2xl space-y-4 hover:border-sky-500/50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white text-lg font-bold">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <a href="https://www.heygen.com/" target="_blank" class="px-3 py-1 rounded-lg bg-sky-500/20 text-sky-300 text-xs font-semibold hover:bg-sky-500/40 transition">
+                            Visit HeyGen <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">HeyGen</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Industry-leading AI avatar generation, photo-realistic digital twins, and seamless multi-lingual video translation with original voice lip-syncing.
+                    </p>
+                    <div class="text-xs text-slate-400 font-mono">Use Case: Automated Video Marketing & Global Localization</div>
+                </div>
+
+                <!-- Google Flow / Veo / Lumiere -->
+                <div class="glass-card p-6 rounded-2xl space-y-4 hover:border-purple-500/50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-pink-600 flex items-center justify-center text-white text-lg font-bold">
+                            <i class="fa-solid fa-video"></i>
+                        </div>
+                        <a href="https://deepmind.google/technologies/" target="_blank" class="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-300 text-xs font-semibold hover:bg-purple-500/40 transition">
+                            Google DeepMind <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Google Flow / Veo</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Google's cinematic AI video engines (Veo & Lumiere) capable of 1080p high-consistency video generation, stylized camera controls, and prompt editing.
+                    </p>
+                    <div class="text-xs text-slate-400 font-mono">Use Case: Cinematic Filmmaking & Generative Video</div>
+                </div>
+
+                <!-- Runway Gen-3 -->
+                <div class="glass-card p-6 rounded-2xl space-y-4 hover:border-emerald-500/50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white text-lg font-bold">
+                            <i class="fa-solid fa-film"></i>
+                        </div>
+                        <a href="https://runwayml.com/" target="_blank" class="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-semibold hover:bg-emerald-500/40 transition">
+                            RunwayML <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Runway Gen-3 Alpha</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Hyper-realistic text-to-video, image-to-video, and motion-brush physics control for professional visual effects and storytelling.
+                    </p>
+                    <div class="text-xs text-slate-400 font-mono">Use Case: Studio-Grade VFX & Creative Control</div>
+                </div>
+
+                <!-- ElevenLabs -->
+                <div class="glass-card p-6 rounded-2xl space-y-4 hover:border-rose-500/50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 to-amber-600 flex items-center justify-center text-white text-lg font-bold">
+                            <i class="fa-solid fa-waveform-lines"></i>
+                        </div>
+                        <a href="https://elevenlabs.io/" target="_blank" class="px-3 py-1 rounded-lg bg-rose-500/20 text-rose-300 text-xs font-semibold hover:bg-rose-500/40 transition">
+                            ElevenLabs <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">ElevenLabs</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        State-of-the-art AI voice synthesis, instantaneous voice cloning, sound effects generation, and real-time conversational voice agents.
+                    </p>
+                    <div class="text-xs text-slate-400 font-mono">Use Case: Podcasting, Dubbing & Voice Acting</div>
+                </div>
+
+                <!-- Midjourney -->
+                <div class="glass-card p-6 rounded-2xl space-y-4 hover:border-indigo-500/50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-sky-600 flex items-center justify-center text-white text-lg font-bold">
+                            <i class="fa-solid fa-palette"></i>
+                        </div>
+                        <a href="https://www.midjourney.com/" target="_blank" class="px-3 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 text-xs font-semibold hover:bg-indigo-500/40 transition">
+                            Midjourney <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Midjourney v6</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Photorealistic image synthesis with immaculate lighting, texture rendering, character consistency, and graphic design capabilities.
+                    </p>
+                    <div class="text-xs text-slate-400 font-mono">Use Case: Concept Art, Branding & Visual Design</div>
+                </div>
+
+                <!-- Sora by OpenAI -->
+                <div class="glass-card p-6 rounded-2xl space-y-4 hover:border-amber-500/50 transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-600 flex items-center justify-center text-white text-lg font-bold">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <a href="https://openai.com/sora" target="_blank" class="px-3 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-semibold hover:bg-amber-500/40 transition">
+                            OpenAI Sora <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">OpenAI Sora</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        World-simulator video generation engine understanding physics, 3D persistence, and long continuous shot continuity.
+                    </p>
+                    <div class="text-xs text-slate-400 font-mono">Use Case: Physics Simulation & Full-Length Video</div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950/80 backdrop-blur-md py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-sky-500/20 flex items-center justify-center text-sky-400 font-bold">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <span class="text-lg font-bold gradient-text">NEXUS AI 2026</span>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400 font-medium">
+                <a href="https://gemini.google.com/" target="_blank" class="hover:text-sky-400 transition">Google Gemini</a>
+                <a href="https://claude.ai/" target="_blank" class="hover:text-purple-400 transition">Anthropic Claude</a>
+                <a href="https://www.deepseek.com/" target="_blank" class="hover:text-rose-400 transition">DeepSeek AI</a>
+                <a href="https://www.heygen.com/" target="_blank" class="hover:text-emerald-400 transition">HeyGen</a>
+                <a href="https://runwayml.com/" target="_blank" class="hover:text-amber-400 transition">RunwayML</a>
+            </div>
+
+            <p class="text-xs text-slate-500">
+                © 2026 NEXUS AI Hub. Designed for high performance and smooth WebGL interactions.
+            </p>
+        </div>
+    </footer>
+
+    <!-- MODAL DIALOGS -->
+    <div id="modal-container" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 transition-opacity duration-300">
+        <div class="glass-card max-w-2xl w-full p-6 sm:p-8 rounded-3xl relative max-h-[85vh] overflow-y-auto border border-sky-500/30 space-y-6">
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & THREE.JS CANVAS -->
+    <script>
+        // -------------------------------------------------------------
+        // 1. THREE.JS OPTIMIZED 3D NEURAL PARTICLES BACKGROUND
+        // -------------------------------------------------------------
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Particle nodes geometry
+        const particleCount = window.innerWidth < 768 ? 70 : 140;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const velocities = [];
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 20;
+            positions[i + 1] = (Math.random() - 0.5) * 20;
+            positions[i + 2] = (Math.random() - 0.5) * 20;
+
+            velocities.push({
+                x: (Math.random() - 0.5) * 0.005,
+                y: (Math.random() - 0.5) * 0.005,
+                z: (Math.random() - 0.5) * 0.005
+            });
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const material = new THREE.PointsMaterial({
+            color: 0x38bdf8,
+            size: 0.12,
+            transparent: true,
+            opacity: 0.7
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        camera.position.z = 8;
+
+        // Mouse Parallax Interaction
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const pos = particles.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                const idx = i * 3;
+                pos[idx] += velocities[i].x;
+                pos[idx + 1] += velocities[i].y;
+                pos[idx + 2] += velocities[i].z;
+
+                // Bounce boundaries
+                if (Math.abs(pos[idx]) > 10) velocities[i].x *= -1;
+                if (Math.abs(pos[idx + 1]) > 10) velocities[i].y *= -1;
+                if (Math.abs(pos[idx + 2]) > 10) velocities[i].z *= -1;
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            // Parallax camera easing
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // -------------------------------------------------------------
+        // 2. SCROLL REVEAL INTERSECTION OBSERVER
+        // -------------------------------------------------------------
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-section').forEach(el => observer.observe(el));
+
+        // -------------------------------------------------------------
+        // 3. MODEL FILTERING LOGIC
+        // -------------------------------------------------------------
+        function filterModels(provider) {
+            const cards = document.querySelectorAll('.model-card');
+            const tabs = document.querySelectorAll('.model-tab');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-sky-500', 'text-white');
+                tab.classList.add('glass-card', 'text-slate-300');
+            });
+            event.target.classList.add('bg-sky-500', 'text-white');
+            event.target.classList.remove('glass-card', 'text-slate-300');
+
+            cards.forEach(card => {
+                if (provider === 'all' || card.dataset.provider === provider) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // -------------------------------------------------------------
+        // 4. THEME TOGGLE (LIGHT / DARK)
+        // -------------------------------------------------------------
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-sun text-lg';
+                material.color.setHex(0x0284c7); // Darker blue for light theme
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-moon text-lg';
+                material.color.setHex(0x38bdf8);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 5. DEEP DIVE MODAL DIALOGS
+        // -------------------------------------------------------------
+        const modalData = {
+            'gemini-detail': {
+                title: 'Google Gemini Architecture',
+                color: 'sky',
+                content: `
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Gemini is built natively multimodal from day one, trained across joint audio, video, image, and text tokens instead of stitching disparate encoders together.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300 font-mono">
+                        <li><strong>Context Architecture:</strong> RingAttention enabling 2 Million + token active memory.</li>
+                        <li><strong>Inference Engine:</strong> TPU v5p superclusters for zero-latency streaming.</li>
+                        <li><strong>Capabilities:</strong> Ingest 1 hour of continuous video or 60,000 lines of code in a single query.</li>
+                    </ul>
+                `
+            },
+            'claude-detail': {
+                title: 'Anthropic Claude Architecture',
+                color: 'purple',
+                content: `
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Claude models emphasize safety alignment via Constitutional AI (RLAIF) paired with state-of-the-art coding and reasoning capabilities.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300 font-mono">
+                        <li><strong>Constitutional AI:</strong> Self-critique and alignment driven by a written constitution of principles.</li>
+                        <li><strong>Computer Use:</strong> Autonomous GUI navigation—clicking, typing, and interpreting desktop screens.</li>
+                        <li><strong>Artifact Workspace:</strong> Real-time rendered dynamic preview environment for web apps and code.</li>
+                    </ul>
+                `
+            },
+            'deepseek-detail': {
+                title: 'DeepSeek & Open Reasoning Architecture',
+                color: 'rose',
+                content: `
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        DeepSeek redefined AI unit economics through architectural innovation rather than brute force hardware scaling.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300 font-mono">
+                        <li><strong>Multi-Head Latent Attention (MLA):</strong> Drastically compresses Key-Value (KV) cache memory requirements during inference.</li>
+                        <li><strong>DeepSeekMoE:</strong> Fine-grained expert routing with 256 experts (8 active per token).</li>
+                        <li><strong>Pure RL Training:</strong> DeepSeek-R1-Zero proved reasoning emerges naturally via RL incentives without initial SFT step-by-step guidance.</li>
+                    </ul>
+                `
+            }
+        };
+
+        function openModal(id) {
+            const container = document.getElementById('modal-container');
+            const content = document.getElementById('modal-content');
+            const data = modalData[id];
+
+            if (!data) return;
+
+            content.innerHTML = `
+                <h3 class="text-2xl font-bold text-white mb-2">${data.title}</h3>
+                <div class="h-1 w-20 bg-${data.color}-500 rounded-full mb-4"></div>
+                ${data.content}
+            `;
+
+            container.classList.remove('hidden');
+            setTimeout(() => container.classList.remove('opacity-0'), 10);
+        }
+
+        function closeModal() {
+            const container = document.getElementById('modal-container');
+            container.classList.add('opacity-0');
+            setTimeout(() => container.classList.add('hidden'), 300);
+        }
+
+        // Close on background backdrop click
+        document.getElementById('modal-container').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-container') closeModal();
+        });
+    </script>
+</body>
+</html>
